@@ -4,6 +4,8 @@ const http = require('http');
 const server = http.createServer(app);
 const logger = require('morgan');
 const cors = require('cors');
+const passport = require('passport');
+const session = require('express-session');
 
 //Importar Rutas
 
@@ -17,6 +19,17 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(cors());
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./config/passport')(passport);
 
 app.disable('x-powered-by');
 
