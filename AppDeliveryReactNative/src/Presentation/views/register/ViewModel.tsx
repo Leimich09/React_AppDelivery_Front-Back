@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { ApiDelivery } from '../../../Data/sources/remote/api/ApiDelivery';
 import { RegisterAuthUseCase } from '../../../Domain/useCases/auth/RegisterAuth';
 import { useStateForPath } from '@react-navigation/native';
+
 RegisterAuthUseCase
 
 const RegisterViewModel = () => {

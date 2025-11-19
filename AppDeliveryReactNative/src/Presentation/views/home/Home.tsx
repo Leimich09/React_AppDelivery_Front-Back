@@ -1,17 +1,19 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, use} from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Image, View, Text, TextInput, ToastAndroid, TouchableOpacity, KeyboardAvoidingView, Platform, } from 'react-native';
 import { RoundedButton } from '../../../Presentation/components/RoundedButton';
-import {StackNavigationProp} from '@react-navigation/stack'
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack'
 import { RootStackParamList } from '../../../../App';
 import useViewModel from './ViewModel';
 import styles from './Styles';
-import CustomTextInput from '../../components/CustomTextInput';
+import  CustomTextInput  from '../../components/CustomTextInput';
 
-const HomeScreen = () => {
+interface Props extends StackScreenProps<RootStackParamList, 'HomeScreen'>{};
+
+const HomeScreen = ({navigation, route}: Props) => {
     
-    const{email, password, errorMessage, onChange, login} = useViewModel();
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+    const{email, password, errorMessage, user, onChange, login} = useViewModel();
+   
 
     useEffect(() => {
         if (errorMessage !== '') {
@@ -19,6 +21,11 @@ const HomeScreen = () => {
         }
     }, [errorMessage]);
 
+    useEffect(() => {
+        if (user?.id !== null && user?.id !== undefined) {
+            navigation.replace('ProfileInfoScreen');
+        }
+    }, [user]);
 
     return (
     //Columna
