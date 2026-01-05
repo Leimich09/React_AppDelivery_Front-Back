@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { ApiDelivery } from '../../../Data/sources/remote/api/ApiDelivery';
 import { RegisterAuthUseCase } from '../../../Domain/useCases/auth/RegisterAuth';
 import { useStateForPath } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 
 RegisterAuthUseCase
 
@@ -12,10 +13,39 @@ const RegisterViewModel = () => {
         name: '',
         lastname:'',
         email: '',
+        image: '',
         phone:'',
         password:'',
         confirmPassword:'',
     })
+
+    const [file, setFile] = useState<ImagePicker.ImagePickerAsset | null>(null);
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 1
+        });
+
+        if (!result.canceled) {
+            onChange('image', result.assets[0].uri);
+            setFile(result.assets[0]);
+        }
+    }
+
+    const takePhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 1
+        });
+
+        if (!result.canceled) {
+            onChange('image', result.assets[0].uri);
+            setFile(result.assets[0]);
+        }
+    }
 
     const onChange = (property: string, value: any) => {
         setValues({ ...values, [property]: value})
@@ -62,13 +92,15 @@ const RegisterViewModel = () => {
             setErrorMessage('Las contraseñas no coinciden');
         }
 
-        return true;
+        return true;   
     }
 
     return {
       ...values,
       onChange,
       register,
+      pickImage,
+      takePhoto,
       errorMessage
     }
 }

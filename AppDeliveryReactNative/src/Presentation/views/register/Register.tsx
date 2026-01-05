@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Image, View, Text, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { Image, View, Text, KeyboardAvoidingView, Platform, ScrollView, ToastAndroid, TouchableOpacity, } from 'react-native';
 import RoundedButton from '../../../Presentation/components/RoundedButton';
 import useViewModel from './ViewModel';
 import CustomTextInput from '../../components/CustomTextInput';
 import styles from './Styles'
+import ModalPickImage from '../../components/ModalPickImage';
 
 export const RegisterScreen = () => {
 
-    const { name, lastname, email, phone, password, confirmPassword, errorMessage, onChange, register, } = useViewModel();
+    const { name, lastname, email, image, phone, password, confirmPassword, errorMessage, onChange, register, pickImage, takePhoto } = useViewModel();
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         if(errorMessage != ''){
@@ -26,10 +28,19 @@ export const RegisterScreen = () => {
         />
 
         <View style={styles.logoContainer}>
-            <Image
-                source={require('../../../../assets/user_image.png')}
-                style={styles.logoImage}
-            />
+            <TouchableOpacity onPress={() =>setModalVisible(true)}>
+                {
+                    image == ''
+                    ? <Image
+                        source={require('../../../../assets/user_image.png')}
+                        style={styles.logoImage}
+                    />
+                    : <Image
+                        source={{ uri: image}}
+                        style={styles.logoImage}
+                    />
+                }
+            </TouchableOpacity>
             <Text style={styles.logoText}>SELECCIONA UNA IMAGEN</Text>
         </View>
 
@@ -104,6 +115,12 @@ export const RegisterScreen = () => {
         
         </View>
 
+       <ModalPickImage
+         openGallery={ pickImage}
+         openCamera={ takePhoto }
+         modalUseState= { modalVisible }
+         setModalUseState={ setModalVisible }
+       />
     </KeyboardAvoidingView>
     );
 }

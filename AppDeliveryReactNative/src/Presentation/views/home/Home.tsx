@@ -58,7 +58,7 @@ const HomeScreen = ({navigation, route}: Props) => {
                 value= { email }
             />  
 
-             <CustomTextInput 
+            <CustomTextInput 
                 image={ require('../../../../assets/green/cerrar.png')}
                 placeholder='Contraseña'
                 keyboardType='default'
